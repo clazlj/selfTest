@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>js表达式支持</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    {{5+5}}<br/>
+    {{ok?'YES':'NO'}}<br/>
+    {{message.split('').reverse().join('')}}
+    <div v-bind:id="'list-'+id">菜鸟教程</div>
+</div>
+
+<script type="text/javascript">
+    new Vue({
+        el:'#app',
+        data:{
+            ok:true,
+            message:'RUNOOB',
+            id:15
+        }
+    })
+</script>
+</body>
+</html>
