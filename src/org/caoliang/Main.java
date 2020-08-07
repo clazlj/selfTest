@@ -26,10 +26,7 @@ public class Main {
 
     private static OperateFileService operateFileService = new OperateFileServiceImpl();
 
-
     public static final Integer[] SSQ_RED_NUMBER = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33};
-
-
 
 
     public static void main(String[] ars) {
@@ -40,7 +37,6 @@ public class Main {
         String replaceResult = "2,3,4,5".replace(",", "球,");
 
         if (replaceResult != null && replaceResult.length() > 0) {
-
             replaceResult += "球";
         }
 
@@ -89,8 +85,6 @@ public class Main {
 
         int a = 5, b = 8;
 
-        
-
         String splitStr = "171122001=6_3S1.94/1S3.00^1_3S4.15,171122002=6_3S1.93/1S3.20^1_3S3.95/1S3.60";
 
 
@@ -117,7 +111,7 @@ public class Main {
 
         String dataSql = getDataSql("");
 
-        boolean isright = Integer.valueOf(2).equals(null);
+        boolean isRight = Integer.valueOf(2).equals(null);
 
         String replaceStr = "5_55*9:0";
         replaceStr.replace("9:0", "胜其他");
@@ -143,9 +137,7 @@ public class Main {
         Collection<Integer> colc = new ArrayList<>();
         colc.add(8);
 
-        list.forEach(x->{
-            System.out.println(x);
-        });
+        list.forEach(System.out::println);
 
         aboutBigDecimal();
 

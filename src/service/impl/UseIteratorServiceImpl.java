@@ -27,7 +27,7 @@ public class UseIteratorServiceImpl implements UseIteratorService {
         list2.add(Long.valueOf(7));
         list2.add(Long.valueOf(8));
 
-        Iterator iterator = list1.iterator();
+        Iterator<Long> iterator = list1.iterator();
         while (iterator.hasNext()) {
             if (!list2.contains(iterator.next())) {
                 iterator.remove();

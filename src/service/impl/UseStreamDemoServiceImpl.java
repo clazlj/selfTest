@@ -10,6 +10,11 @@ import java.util.List;
  * Created by caoliang on 2017/7/27.
  */
 public class UseStreamDemoServiceImpl implements UseStreamDemoService {
+    public static void main(String[] args) {
+        flatMapDemo();
+        getMinMax();
+    }
+
     @Override
     public void useStream() {
         stramApiOne();
@@ -42,16 +47,14 @@ public class UseStreamDemoServiceImpl implements UseStreamDemoService {
         Integer findResult = numbers.stream().filter(i -> i == 5).findFirst().get();
     }
 
-    private void getMinMax() {
+    private static void getMinMax() {
         List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
 
         int min = numbers.stream().min((i1, i2) -> i1.compareTo(i2)).get();
+        min = numbers.stream().min(Integer::compareTo).get();
 
         int max = numbers.stream().max((i1, i2) -> i1.compareTo(i2)).get();
-    }
-
-    public static void main(String[] args) {
-        flatMapDemo();
+        max = numbers.stream().max(Integer::compareTo).get();
     }
 
     private static void flatMapDemo() {
