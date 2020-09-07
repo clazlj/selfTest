@@ -1,8 +1,11 @@
 package util;
 
+import com.alibaba.fastjson.JSON;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -11,6 +14,11 @@ import java.util.stream.Stream;
  * Created by jdd on 2019/1/23.
  */
 public class StreamUtils {
+    public static void main(String[] args) {
+        groupList();
+
+    }
+
 
     public static void dealCollect() {
         Arrays.stream(new int[] { 1, 3, 5, 7, 15, 28, 37 }, 3, 6)
@@ -63,5 +71,16 @@ public class StreamUtils {
 
         List abc = strLists.stream().map(i -> i.stream().map(String::valueOf)).collect(Collectors.toList());
 
+    }
+
+    public static void groupList() {
+        List<String> strList = new ArrayList<>(Arrays.asList("1", "2", "5", "2", "1", "2", "3", "1"));
+
+        Map<String, List<String>> strListMap = strList.stream().collect(Collectors.groupingBy(i -> i));
+        System.out.println(JSON.toJSONString(strListMap));
+
+        Map<String, Long> strSizeMap = strList.stream()
+                .collect(Collectors.groupingBy(i -> i, Collectors.counting()));
+        System.out.println(JSON.toJSONString(strSizeMap));
     }
 }
