@@ -15,8 +15,9 @@ import java.util.stream.Stream;
  */
 public class StreamUtils {
     public static void main(String[] args) {
-        groupList();
+        sequentialSum(5L);
 
+        //groupList();
     }
 
 
@@ -34,6 +35,13 @@ public class StreamUtils {
     }
 
     public static long sequentialSum(long n) {
+        //非并行的情况，reduce方法的combiner参数未起作用
+        Long reduce0 = Stream.iterate(1L, i -> i + 1).limit(n)
+                .reduce(0L, Long::sum, Long::max);
+
+        Long reduce1 = Stream.iterate(1L, i -> i + 1).limit(n).parallel()
+                .reduce(0L, Long::sum, Long::max);
+
         return
                 Stream.iterate(1L, i -> i + 1).limit(n).reduce(0L, Long::sum);
     }
