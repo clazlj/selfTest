@@ -2,16 +2,32 @@ package demo;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CollectionDemo {
     public static void main(String[] args) {
+        toArrayList();
 //        operateArrayList();
 
-        operateLinkedList();
+//        operateLinkedList();
+    }
+
+    /**
+     * 将数组转换为ArrayList
+     */
+    public static void toArrayList() {
+        //最简便的方法
+        List<String> list = new ArrayList<>(Arrays.asList("3", "56", "gy"));
+
+        //使用 Java8 的Stream
+        Integer[] myArray1 = { 1, 2, 3 };
+        List<Integer> list1 = Arrays.stream(myArray1).collect(Collectors.toList());
+
+        int[] myArray2 = {1, 2, 3};
+        List<Integer> list2 = Arrays.stream(myArray2).mapToObj(Integer::valueOf).collect(Collectors.toList());
+        list2 = Arrays.stream(myArray2).boxed().collect(Collectors.toList());
+
     }
 
     /**
