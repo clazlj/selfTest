@@ -28,6 +28,10 @@ public class CollectionDemo {
         List<Integer> list2 = Arrays.stream(myArray2).mapToObj(Integer::valueOf).collect(Collectors.toList());
         list2 = Arrays.stream(myArray2).boxed().collect(Collectors.toList());
 
+        //使用 Guava：ImmutableList，Lists
+
+        //使用 Apache Commons Collections
+
     }
 
     /**
