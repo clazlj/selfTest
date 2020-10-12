@@ -43,8 +43,7 @@ public class ObserveDemo {
 
         @Override
         public void update(Observable o, Object arg) {
-
-            System.out.println(name + "收到被观察者的变更消息");
+            System.out.println("观察者" + name + "收到被观察者房价的最新价格：" + arg);
         }
     }
 
