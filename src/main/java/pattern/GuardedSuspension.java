@@ -31,7 +31,11 @@ public class GuardedSuspension {
         int abc = 2 << 2;
         log.debug("等待过程中计算出另一个结果{}", abc);
 
-        Object response = guardedObject.get();
+        Object response;
+
+//        response = guardedObject.get();
+
+        response = guardedObject.get(1000);
 
         log.debug("{}", response);
     }
@@ -42,6 +46,9 @@ class GuardedObject {
 
     private final Object lock = new Object();
 
+    /**
+     * 无限等待
+     */
     public Object get() {
         synchronized (lock) {
             while (response == null) {
@@ -51,6 +58,32 @@ class GuardedObject {
                     e.printStackTrace();
                 }
             }
+            return response;
+        }
+    }
+
+    /**
+     * 带超时的等待
+     */
+    public Object get(long millis) {
+        synchronized (lock) {
+            long start = System.currentTimeMillis();
+            long timePassed = 0;
+
+            while (response == null) {
+                long timeLeft = millis - timePassed;
+                if (timeLeft <= 0) {
+                    break;
+                }
+                try {
+                    lock.wait(timeLeft);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //虚假唤醒(response仍然为null)，继续轮询直至用完millis
+                timePassed = System.currentTimeMillis() - start;
+            }
+
             return response;
         }
     }
