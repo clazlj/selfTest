@@ -17,14 +17,21 @@ public class GuardedSuspension {
     public static void main(String[] args) {
         GuardedObject guardedObject = new GuardedObject();
 
-        Thread t1 = new Thread(() -> guardedObject.complete("完成了"), "t1");
+        Thread t1 = new Thread(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(3);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            guardedObject.complete("完成了");
+        }, "t1");
         t1.start();
 
         log.debug("主线程等待操作结果，先干点其他事...");
         int abc = 2 << 2;
         log.debug("等待过程中计算出另一个结果{}", abc);
 
-        Object response = guardedObject.getResponse();
+        Object response = guardedObject.get();
 
         log.debug("{}", response);
     }
@@ -35,7 +42,7 @@ class GuardedObject {
 
     private final Object lock = new Object();
 
-    public Object getResponse() {
+    public Object get() {
         synchronized (lock) {
             while (response == null) {
                 try {
@@ -49,19 +56,7 @@ class GuardedObject {
     }
 
     public void complete(Object response) {
-        //仅用于方便测试主线程先获得锁
-//        try {
-//            TimeUnit.SECONDS.sleep(5);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
         synchronized (lock) {
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             // 条件满足，通知等待线程
             this.response = response;
             lock.notifyAll();
