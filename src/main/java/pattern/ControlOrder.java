@@ -2,6 +2,8 @@ package pattern;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 
@@ -11,17 +13,67 @@ import java.util.concurrent.locks.LockSupport;
 @Slf4j(topic = "p.ControlOrder")
 public class ControlOrder {
     public static void main(String[] args) {
-        //线程2先打印，然后线程1再打印
+//        orderLogByLockSupport();
 
-        orderByLockSupport();
-
-        //wait，notify也可实现。但较复杂
+        loopLog();
     }
 
     /**
-     * 使用LockSupport的park，unpark
+     * 3个线程各自打印abc
+     * 打印出5个abc，即abcabcabcabcabc
      */
-    private static void orderByLockSupport() {
+    private static void loopLog() {
+        LoopLogObject logObject = new LoopLogObject();
+
+        Thread t1 = new Thread(() -> logObject.print("a"), "t1");
+        Thread t2 = new Thread(() -> logObject.print("b"), "t2");
+        Thread t3 = new Thread(() -> logObject.print("c"), "t3");
+        logObject.setThreadList(Arrays.asList(t1, t2, t3));
+
+        logObject.begin();
+    }
+
+    static class LoopLogObject {
+        private List<Thread> threadList;
+
+        public void setThreadList(List<Thread> threadList) {
+            this.threadList = threadList;
+        }
+
+        public void begin() {
+            threadList.forEach(Thread::start);
+
+            LockSupport.unpark(threadList.get(0));
+        }
+
+        public void print(String str) {
+            for (int i = 0; i < 5; i++) {
+                LockSupport.park();
+                System.out.print(str);
+                Thread current = Thread.currentThread();
+                LockSupport.unpark(getNext(current));
+            }
+        }
+
+        private Thread getNext(Thread current) {
+            int curIndex = threadList.indexOf(current);
+            int nextIndex = curIndex + 1;
+            if (nextIndex > threadList.size() - 1) {
+                nextIndex = 0;
+            }
+            return threadList.get(nextIndex);
+        }
+    }
+
+
+
+
+    /**
+     * 线程2先打印，然后线程1再打印
+     * 使用LockSupport的park，unpark
+     * wait，notify也可实现。但较复杂
+     */
+    private static void orderLogByLockSupport() {
         Thread t1 = new Thread(() -> {
             // 当没有『许可』时，当前线程暂停运行；有『许可』时，用掉这个『许可』，当前线程恢复运行
             LockSupport.park();
