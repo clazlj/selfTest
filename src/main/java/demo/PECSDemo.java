@@ -36,8 +36,10 @@ public class PECSDemo {
         Collections.copy(workerList, jobList);*/
 
         Collections.copy(jobList, workerList);
+        System.out.println(jobList);
 
         Collections.copy(jobList, programmerList);
+        System.out.println(jobList);
     }
 
     static class Job {
