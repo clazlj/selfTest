@@ -2,10 +2,7 @@ package util;
 
 import com.alibaba.fastjson.JSON;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -15,9 +12,19 @@ import java.util.stream.Stream;
  */
 public class StreamUtils {
     public static void main(String[] args) {
-        sequentialSum(5L);
+//        sequentialSum(5L);
 
         //groupList();
+
+        summarizingInt();
+    }
+
+    public static void summarizingInt() {
+        IntSummaryStatistics collect = Stream.iterate(0, n -> n + 2).limit(10)
+                .collect(Collectors.summarizingInt(i -> i));
+        System.out.println(collect.getMax());
+        System.out.println(collect.getCount());
+        System.out.println(collect.getAverage());
     }
 
 
