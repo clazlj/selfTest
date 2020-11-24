@@ -16,7 +16,17 @@ import java.util.concurrent.TimeUnit;
 @Slf4j(topic = "demo.semaphoreDemo")
 public class SemaphoreDemo {
     public static void main(String[] args) {
-        getSemaphore();
+//        getSemaphore();
+
+        new Thread(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(1);
+                log.info("线程执行完毕");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
     }
 
     private static void getSemaphore() {

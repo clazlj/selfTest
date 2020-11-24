@@ -1,10 +1,29 @@
 package demo;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class ReflectDemo {
     public static void main(String[] args) throws Exception {
+        newByClass();
+
+        newByConstructor();
+    }
+
+    private static void newByConstructor() throws ClassNotFoundException, NoSuchMethodException {
+        Class<?> targetClass = Class.forName("demo.TargetObject");
+        Constructor<?> constructor = targetClass.getDeclaredConstructor(String.class);
+        try {
+            TargetObject targetObject = (TargetObject) constructor.newInstance("fg");
+            System.out.println(targetObject);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void newByClass() throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, NoSuchFieldException {
         //获取类的Class对象并创建其实例
         Class<?> targetClass = Class.forName("demo.TargetObject");
         TargetObject targetObject = (TargetObject) targetClass.newInstance();
@@ -40,11 +59,22 @@ class TargetObject{
         this.value = "JavaGuide";
     }
 
+    public TargetObject(String value) {
+        this.value = value;
+    }
+
     public void publicMethod(String str) {
         System.out.println("I love " + str);
     }
 
     private void privateMethod() {
         System.out.println("value is " + value);
+    }
+
+    @Override
+    public String toString() {
+        return "TargetObject{" +
+                "value='" + value + '\'' +
+                '}';
     }
 }
