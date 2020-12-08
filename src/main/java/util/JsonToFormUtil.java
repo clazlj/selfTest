@@ -49,13 +49,19 @@ public class JsonToFormUtil {
 
         JSONObject jsonObject = JSON.parseObject(json);
 
-        JSONObject header = jsonObject.getJSONObject("header");
-        header.forEach((k, v) -> sb.append(k).append(":").append(v).append("\r\n"));
-
-        JSONObject body = jsonObject.getJSONObject("body");
-        body.forEach((k, v) -> sb.append(k).append(":").append(v).append("\r\n"));
+        appendValue(jsonObject, sb);
 
         System.out.println("转换成postman的表单数据的Bulk Edit结果：");
         System.out.println(sb);
+    }
+
+    private static void appendValue(JSONObject jsonObject, StringBuilder sb) {
+        jsonObject.forEach((k, v) -> {
+            if (v instanceof JSONObject) {
+                appendValue((JSONObject) v, sb);
+            } else {
+                sb.append(k).append(":").append(v).append("\r\n");
+            }
+        });
     }
 }
