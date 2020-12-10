@@ -3,6 +3,9 @@ package demo;
 import java.io.*;
 import java.sql.*;
 
+/**
+ * 数据库存储文件
+ */
 public class DbFileDemo {
     private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String DB_URL = "jdbc:mysql://localhost:3306/test?useUnicode=true&serverTimezone=GMT";
