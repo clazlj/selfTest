@@ -17,7 +17,7 @@ public class DbFileDemo {
      * 关于注册JDBC驱动Class.forName(JDBC_DRIVER);
      * JDBC 4.0 的规范规定，所有 JDBC 4.0 的驱动 jar 文件必须包含一个 java.sql.Driver，
      * 它位于 jar 文件的 META-INF/services 目录下。这个文件里每一行便描述了一个对应的驱动类
-     * 在启动项目或是服务时，会判断当前classspath中的所的jar包，并检查他们META-INF目录下，是否包含services文件夹，如果包含，就会将里面的配置加载成相应的服务。
+     * 在启动项目或是服务时，会判断当前classpath中的所的jar包，并检查他们META-INF目录下，是否包含services文件夹，如果包含，就会将里面的配置加载成相应的服务。
      * 所以，对于4.0前，使用Class.forName
      * 4.0后我们只需要将JAR包管理好就足够了，这一切都会有人帮我们完成(当然前提是需要使用配套的驱动Jar包）
      */
