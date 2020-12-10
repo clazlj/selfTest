@@ -13,7 +13,7 @@ public class DbFileDemo {
     private static final String DB_PASS = "root";
 
 
-    public static void main(String[] args) throws ClassNotFoundException {
+    public static void main(String[] args) {
 //        writeFileToDb();
 
         readFileFromDb();
