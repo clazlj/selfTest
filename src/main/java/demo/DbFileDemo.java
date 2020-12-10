@@ -20,6 +20,7 @@ public class DbFileDemo {
      * 在启动项目或是服务时，会判断当前classpath中的所的jar包，并检查他们META-INF目录下，是否包含services文件夹，如果包含，就会将里面的配置加载成相应的服务。
      * 所以，对于4.0前，使用Class.forName
      * 4.0后我们只需要将JAR包管理好就足够了，这一切都会有人帮我们完成(当然前提是需要使用配套的驱动Jar包）
+     * 从 Java 6 开始，应用程序不再需要显式地加载驱动程序了，DriverManager 开始能够自动地承担这项任务.
      */
     public static void main(String[] args) {
 //        writeFileToDb();
