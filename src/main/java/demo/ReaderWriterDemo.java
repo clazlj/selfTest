@@ -4,10 +4,10 @@ import java.io.*;
 
 public class ReaderWriterDemo {
     public static void main(String[] args) {
-        copyPom();
+        copyPomFile();
     }
 
-    private static void copyPom() {
+    private static void copyPomFile() {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("pom.xml")));
              BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("pom-backup.xml")))) {
             String line;
