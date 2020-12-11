@@ -56,6 +56,7 @@ public class DbFileDemo {
                 byte[] bytes = new byte[1024];
                 int len;
                 while ((len = is.read(bytes)) != -1) {
+                    //提前break会出现图片不全的现象
                     fos.write(bytes, 0, len);
                     fos.flush();
                 }
