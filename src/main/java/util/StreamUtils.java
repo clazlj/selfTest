@@ -12,11 +12,29 @@ import java.util.stream.Stream;
  */
 public class StreamUtils {
     public static void main(String[] args) {
+        concatStream();
+
 //        sequentialSum(5L);
 
         //groupList();
 
         summarizingInt();
+    }
+
+    private static void concatStream() {
+        List<String> menList = new ArrayList<>();
+        menList.add("男1");
+        menList.add("男2");
+        menList.add("男3");
+
+        List<String> womenList = new ArrayList<>();
+        womenList.add("女3");
+        womenList.add("女2");
+        womenList.add("女1");
+
+        //合并流
+        //创建一个懒惰连接的流，其元素是第一个流的所有元素，后跟第二个流的所有元素。
+        Stream.concat(menList.stream(), womenList.stream()).skip(2).limit(3).forEach(System.out::println);
     }
 
     public static void summarizingInt() {
