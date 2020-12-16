@@ -29,6 +29,7 @@ public class ReflectDemo {
         TargetObject targetObject = (TargetObject) targetClass.newInstance();
 
         //获取类中所有定义的方法
+        //getMethods()获取类或接口的所有公共方法类对象，包括超类或超接口的方法
         Method[] methods = targetClass.getDeclaredMethods();
         for (Method method : methods) {
             System.out.println(method.getName());
@@ -40,13 +41,13 @@ public class ReflectDemo {
 
         //获取指定参数并对参数进行修改
         Field field = targetClass.getDeclaredField("value");
-        //取消安全检查：为了对类中的参数进行修改
+        //取消安全检查：为了对类中的参数进行修改【通用写法：setAccessible(true)】
         field.setAccessible(true);
         field.set(targetObject, "yami");
 
         //private方法
         Method privateMethod = targetClass.getDeclaredMethod("privateMethod");
-        //取消安全检查：为了调用private方法
+        //取消安全检查：为了调用private方法【通用写法：setAccessible(true)】
         privateMethod.setAccessible(true);
         privateMethod.invoke(targetObject);
     }
