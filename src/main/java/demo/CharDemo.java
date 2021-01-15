@@ -15,5 +15,8 @@ public class CharDemo {
         //空字符，对应int的0
         System.out.println(myChar == '\u0000');
         System.out.println(myChar == 0);
+
+        //没有空格，无法替换
+        System.out.println(String.valueOf(myChar).replace(" ", ""));
     }
 }
