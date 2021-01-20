@@ -16,6 +16,8 @@ public class ReflectDemo {
         Class<?> targetClass = Class.forName("demo.TargetObject");
         Constructor<?> constructor = targetClass.getDeclaredConstructor(String.class);
         try {
+            //构造函数即使为private也可以生成实例
+            constructor.setAccessible(true);
             TargetObject targetObject = (TargetObject) constructor.newInstance("fg");
             System.out.println(targetObject);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -26,6 +28,7 @@ public class ReflectDemo {
     private static void newByClass() throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, NoSuchFieldException {
         //获取类的Class对象并创建其实例
         Class<?> targetClass = Class.forName("demo.TargetObject");
+        //无参构造函数为private时抛异常
         TargetObject targetObject = (TargetObject) targetClass.newInstance();
 
         //获取类中所有定义的方法
@@ -60,7 +63,7 @@ class TargetObject{
         this.value = "JavaGuide";
     }
 
-    public TargetObject(String value) {
+    private TargetObject(String value) {
         this.value = value;
     }
 
