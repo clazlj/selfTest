@@ -17,6 +17,7 @@ public class ConditionDemo {
     public static void main(String[] args) throws InterruptedException {
         Thread t1 = new Thread(() -> {
             LOCK.lock();
+            log.info("t1线程状态:" + Thread.currentThread().getState());
 
             try {
                 while (!HAS_BREAKFAST) {
@@ -57,6 +58,7 @@ public class ConditionDemo {
         t2.start();
 
         TimeUnit.SECONDS.sleep(2);
+        log.info("t1线程状态:" + t1.getState());
         sendBreakfast();
 
         TimeUnit.SECONDS.sleep(2);
