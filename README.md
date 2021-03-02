@@ -15,6 +15,7 @@
 >> 引用嵌套
 
 **加粗**，__或这样加粗__，*倾斜*
+<br/>~~这是废弃的方法~~
 
 ![图片alt:blockchain](https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=702257389,1274025419&fm=27&gp=0.jpg "图片title：区块链")
 
