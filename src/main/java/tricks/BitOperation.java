@@ -39,8 +39,9 @@ public class BitOperation {
         n |= n >>> 4;
         n |= n >>> 8;
         n |= n >>> 16;
-        return (n < 0) ? 1 : n + 1;
-    }
+        int MAXIMUM_CAPACITY = 1 << 30;
 
+        return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
+    }
 
 }

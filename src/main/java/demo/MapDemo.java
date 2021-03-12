@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class MapDemo {
     public static void main(String[] args) {
-//        hashMapDemo();
+        hashMapDemo();
         int tableSize = tableSizeFor(4);
 
     }
@@ -26,6 +26,10 @@ public class MapDemo {
         map.put("lao", "老王");
         System.out.println("-------直接输出hashmap:-------");
         System.out.println(map);
+        map.forEach((k,v)->{
+            //hashmap遍历数组，每个数组又遍历链表
+
+        });
     }
 
     private static int tableSizeFor(int cap) {
