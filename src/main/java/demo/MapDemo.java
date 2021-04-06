@@ -1,12 +1,15 @@
 package demo;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class MapDemo {
     public static void main(String[] args) {
         hashMapDemo();
         int tableSize = tableSizeFor(4);
+
+        linkedHashMapDemo();
 
     }
 
@@ -43,5 +46,30 @@ public class MapDemo {
 
         return (n < 0) ? 1 : (n >= 1<<30) ? MAXIMUM_CAPACITY : n + 1;
 
+    }
+
+    private static void linkedHashMapDemo() {
+        System.out.println("-------LinkedHashMap:-------");
+        //默认accessOrder = false，即插入顺序FIFO，不受访问影响
+        Map<Integer, String> insertionMap = new LinkedHashMap<>();
+        for (int i = 0; i < 5; i++) {
+            insertionMap.put(i, String.valueOf(i));
+        }
+        System.out.println("insertionMap轮询");
+        insertionMap.forEach((k, v) -> System.out.println(k));
+        insertionMap.get(3);
+        System.out.println("insertionMap访问了元素3后轮询");
+        insertionMap.forEach((k, v) -> System.out.println(k));
+
+        //accessOrder = true，即访问顺序：访问了某个元素，则该元素会排列到集合的最后一位
+        Map<Integer, String> accessMap = new LinkedHashMap<>(16, 0.75f, true);
+        for (int i = 0; i < 5; i++) {
+            accessMap.put(i, String.valueOf(i));
+        }
+        System.out.println("accessMap轮询");
+        accessMap.forEach((k, v) -> System.out.println(k));
+        accessMap.get(3);
+        System.out.println("accessMap访问了元素3后轮询");
+        accessMap.forEach((k, v) -> System.out.println(k));
     }
 }
