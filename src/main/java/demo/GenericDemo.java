@@ -2,6 +2,8 @@ package demo;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,8 @@ public class GenericDemo {
         compareClass();
 
         addElement();
+
+        getSuperClass();
     }
 
     private static void compareClass() {
@@ -41,5 +45,32 @@ public class GenericDemo {
         add.invoke(list, "5");
 
         System.out.println(list);
+    }
+
+    /**
+     * 在父类是泛型类型的情况下，编译器就必须把类型T(该例中的Integer)保存到子类的class文件中，不然编译器就不知道子类(该例中的SubArrayList)只能存取T这种类型
+     * 在继承了泛型类型的情况下，子类可以获取父类的泛型类型
+     */
+    private static void getSuperClass() {
+        //除非指定SubArrayList<String>，否则编译报错
+        /*SubArrayList subArrayList = new SubArrayList();
+        subArrayList.add("55");*/
+
+        Class<SubArrayList> clazz = SubArrayList.class;
+
+        Type t = clazz.getGenericSuperclass();
+        if (t instanceof ParameterizedType) {
+            ParameterizedType pt = (ParameterizedType) t;
+            //可能有多个泛型类型
+            Type[] types = pt.getActualTypeArguments();
+            Type firstType = types[0];
+            Class<?> typeClass = (Class<?>) firstType;
+            System.out.println(typeClass);
+        }
+    }
+
+    public static class SubArrayList extends ArrayList<Integer> {
+
+
     }
 }
