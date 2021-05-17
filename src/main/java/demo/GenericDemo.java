@@ -20,6 +20,8 @@ public class GenericDemo {
         addElement();
 
         getSuperClass();
+
+        unBoundedWildCardType();
     }
 
     private static void compareClass() {
@@ -73,4 +75,20 @@ public class GenericDemo {
 
 
     }
+
+    /**
+     * C<?>是C<T>的超类，如List<?>是List<Integer>的超类
+     */
+    private static void unBoundedWildCardType() {
+        List<Integer> intList = new ArrayList<>();
+        intList.add(52);
+        intList.add(36);
+
+        List<?> wildCardList = intList;
+
+        for (Object o : wildCardList) {
+            System.out.println(o);
+        }
+    }
+
 }
