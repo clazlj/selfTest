@@ -10,6 +10,10 @@ public class ReflectDemo {
         newByClass();
 
         newByConstructor();
+
+        getSuperClass();
+
+        getInterfaces();
     }
 
     private static void newByConstructor() throws ClassNotFoundException, NoSuchMethodException {
@@ -53,6 +57,24 @@ public class ReflectDemo {
         //取消安全检查：为了调用private方法【通用写法：setAccessible(true)】
         privateMethod.setAccessible(true);
         privateMethod.invoke(targetObject);
+    }
+
+    private static void getSuperClass() {
+        //Integer的父类Number，Number的父类Object，Object的父类null
+        Class<Integer> i = Integer.class;
+        Class<? super Integer> n = i.getSuperclass();
+        System.out.println(n);
+        Class<? super Integer> o = n.getSuperclass();
+        System.out.println(o);
+        System.out.println(o.getSuperclass());
+    }
+
+    private static void getInterfaces() {
+        Class<String> clazz = String.class;
+        Class<?>[] is = clazz.getInterfaces();
+        for (Class<?> i : is) {
+            System.out.println(i);
+        }
     }
 }
 
