@@ -1,15 +1,18 @@
-package test;
+package concurrent;
 
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 
 @Slf4j(topic = "c.interrupt")
 public class TestInterrupt {
     public static void main(String[] args) throws InterruptedException {
 //        interruptBlock();
 
-        interruptNormal();
+//        interruptNormal();
+
+        test4();
     }
 
     /**
@@ -33,7 +36,6 @@ public class TestInterrupt {
         t1.start();
 
         //Thread.sleep(1_000);
-
         //用TimeUnit的sleep代替Thread的sleep来获得更好的可读性。
         TimeUnit.SECONDS.sleep(1);
 
@@ -57,6 +59,39 @@ public class TestInterrupt {
 
         log.debug("interrupt");
         //t1知道自己被打断了，但实际还在执行。可以自己获取打断标记
+        t1.interrupt();
+    }
+
+    private static void test3() throws InterruptedException {
+        Thread t1 = new Thread(() -> {
+            log.debug("park...");
+            LockSupport.park(new Object());
+            log.debug("unpark...");
+            log.debug("打断状态：{}", Thread.currentThread().isInterrupted());
+
+        }, "t1");
+        t1.start();
+
+        TimeUnit.MILLISECONDS.sleep(500L);
+
+        t1.interrupt();
+    }
+
+    private static void test4() throws InterruptedException {
+        Thread t1 = new Thread(() -> {
+            for (int i = 0; i < 5; i++) {
+                log.debug("park...");
+                //许可permit>0或当前线程已被中断，则park()不能阻塞线程
+                LockSupport.park();
+                log.debug("获取打断状态：{}，然后清除打断状态标记", Thread.interrupted());
+
+//                log.debug("仅仅获取打断状态：{}", Thread.currentThread().isInterrupted());
+            }
+        });
+        t1.start();
+
+        TimeUnit.SECONDS.sleep(1);
+
         t1.interrupt();
     }
 }
