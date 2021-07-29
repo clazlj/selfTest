@@ -21,7 +21,7 @@ public class TestCondition {
     public static void main(String[] args) throws InterruptedException {
         Thread t1 = new Thread(() -> {
             LOCK.lock();
-
+            log.debug("抽烟的锁进入");
             try {
                 while (!hasCigarette) {
                     try {
@@ -38,7 +38,7 @@ public class TestCondition {
 
         Thread t2 = new Thread(() -> {
             LOCK.lock();
-
+            log.debug("吃早饭的锁进入");
             try {
                 while (!hasBreakfast) {
                     try {
@@ -57,9 +57,8 @@ public class TestCondition {
         t2.start();
 
         TimeUnit.SECONDS.sleep(2);
-        sendCigarette();
 
-        TimeUnit.SECONDS.sleep(2);
+        sendCigarette();
         sendBreakfast();
     }
 
