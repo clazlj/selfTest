@@ -1,4 +1,4 @@
-package test;
+package concurrent;
 
 public class TestFrames {
     public static void main(String[] args) {
