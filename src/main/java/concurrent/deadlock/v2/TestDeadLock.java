@@ -1,14 +1,15 @@
-package concurrent.deadlock;
+package concurrent.deadlock.v2;
 
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author cl
- * @create 2021-07-29 11:18
+ * @create 2021-07-29 14:12
  **/
-public class TestDeadLockV1 {
+public class TestDeadLock {
     public static void main(String[] args) {
         Chopstick c1 = new Chopstick("1");
         Chopstick c2 = new Chopstick("2");
@@ -16,14 +17,10 @@ public class TestDeadLockV1 {
         Chopstick c4 = new Chopstick("4");
         Chopstick c5 = new Chopstick("5");
 
-        //哲学家：苏格拉底，柏拉图，亚里士多德，赫拉克利特，阿基米德
-
-        //拿筷子最坏的情况：1等2,2等3,3等4,4等5,5等1
         Philosopher p1 = new Philosopher("苏格拉底", c1, c2);
         Philosopher p2 = new Philosopher("柏拉图", c2, c3);
         Philosopher p3 = new Philosopher("亚里士多德", c3, c4);
         Philosopher p4 = new Philosopher("赫拉克利特", c4, c5);
-        //解锁：可以让阿基米德先拿筷子1，再拿筷子5
         Philosopher p5 = new Philosopher("阿基米德", c5, c1);
 
         p1.start();
@@ -35,7 +32,7 @@ public class TestDeadLockV1 {
 }
 
 @Slf4j(topic = "c.Philosopher")
-class Philosopher extends Thread{
+class Philosopher extends Thread {
     final Chopstick left;
     final Chopstick right;
 
@@ -47,22 +44,32 @@ class Philosopher extends Thread{
 
     @Override
     public void run() {
-        for (; ; ) {
-            synchronized (left) {
-                synchronized (right) {
-                    log.debug("eating...");
-                    try {
-                        TimeUnit.MILLISECONDS.sleep(200);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+        while (true) {
+            // 尝试获得左手的筷子
+            if (left.tryLock()) {
+                try {
+                    // 尝试获得右手的筷子
+                    if (right.tryLock()) {
+                        try {
+                            log.debug("eating...");
+                            try {
+                                TimeUnit.MILLISECONDS.sleep(200);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        } finally {
+                            right.unlock();
+                        }
                     }
+                } finally {
+                    left.unlock();
                 }
             }
         }
     }
 }
 
-class Chopstick {
+class Chopstick extends ReentrantLock {
     String name;
 
     public Chopstick(String name) {
@@ -74,3 +81,4 @@ class Chopstick {
         return String.format("筷子%s", name);
     }
 }
+
