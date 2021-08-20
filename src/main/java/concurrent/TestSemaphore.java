@@ -1,4 +1,4 @@
-package demo;
+package concurrent;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,10 +13,10 @@ import java.util.concurrent.TimeUnit;
  * Semaphore 可以用来构建一些对象池，资源池之类的，比如数据库连接池。
  * Semaphore 基本能完成 ReentrantLock 的所有工作，使用方法也与之类似，通过 acquire()与release()方法来获得和释放临界资源
  */
-@Slf4j(topic = "demo.semaphoreDemo")
-public class SemaphoreDemo {
+@Slf4j(topic = "demo.testSemaphore")
+public class TestSemaphore {
     public static void main(String[] args) {
-//        getSemaphore();
+        getSemaphore();
 
         new Thread(() -> {
             try {
