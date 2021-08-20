@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
  * 举例：聚餐要等所有人都到齐了才开始吃，最后一个到达的人要自罚一杯。
  * 构造函数的参数：
  * int parties 是参与线程的个数
- * Runnable barrierAction 是最后一个到达的线程要做的任务。
+ * Runnable barrierAction 是最后一个到达的线程要做的任务、行为。
  *
  * Generation这个内部类，代表的就是屏障。其broken属性用来标识这个屏障是否被打破。
  * lock和trip是重入锁和Condition。所以说其底层其实是通过ReentrantLock来实现的。
