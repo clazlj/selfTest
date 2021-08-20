@@ -29,7 +29,6 @@ public class TestCyclicBarrier {
         ExecutorService executor = Executors.newFixedThreadPool(3);
 
         CyclicBarrier barrier = new CyclicBarrier(2, () -> log.debug("task1,task2 finish..."));
-
         for (int i = 0; i < 5; i++) {
             executor.submit(() -> {
                 SleepUtil.sleep(1);
