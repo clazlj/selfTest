@@ -1,6 +1,7 @@
 package concurrent;
 
 import lombok.extern.slf4j.Slf4j;
+import util.SleepUtil;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -47,20 +48,12 @@ public class TestState {
 
         Thread t6 = new Thread(() -> {
             synchronized (TestState.class) {
-                try {
-                    TimeUnit.SECONDS.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                SleepUtil.sleep(1000);
             }
         }, "t6");
         t6.start();
 
-        try {
-            TimeUnit.MILLISECONDS.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        SleepUtil.sleep(500, TimeUnit.MILLISECONDS);
 
         log.debug("t1 state {}", t1.getState());
         log.debug("t2 state {}", t2.getState());

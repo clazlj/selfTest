@@ -3,6 +3,7 @@ package util;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 建议用TimeUnit的sleep代替Thread的sleep来获得更好的可读性。
  * @author cl
  * @create 2021-08-13 12:00
  **/
