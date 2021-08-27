@@ -11,7 +11,9 @@ import java.util.concurrent.locks.LockSupport;
 @Slf4j(topic = "c.TestOrder")
 public class TestOrder {
     public static void main(String[] args) {
-        testSyncPark();
+//        testSyncPark();
+
+        testSyncWaitNotify();
     }
 
     private static void testSyncPark() {
@@ -27,6 +29,18 @@ public class TestOrder {
 
         //启动各个线程，释放第一个线程的锁
         syncPark.begin();
+    }
+
+    private static void testSyncWaitNotify() {
+        SyncWaitNotify syncWaitNotify = new SyncWaitNotify(1, 5);
+
+        Thread t1 = new Thread(() -> syncWaitNotify.print(1, 2, "a"), "t1");
+        Thread t2 = new Thread(() -> syncWaitNotify.print(2, 3, "b"), "t2");
+        Thread t3 = new Thread(() -> syncWaitNotify.print(3, 1, "c\n"), "t3");
+
+        syncWaitNotify.setThreads(t1, t2, t3);
+
+        syncWaitNotify.begin();
     }
 }
 
@@ -73,5 +87,43 @@ class SyncPark {
             nextThreadIndex = 0;
         }
         return threads[nextThreadIndex];
+    }
+}
+
+class SyncWaitNotify {
+    private int flag;
+    private int loopNum;
+    private Thread[] threads;
+
+    public SyncWaitNotify(int flag, int loopNum) {
+        this.flag = flag;
+        this.loopNum = loopNum;
+    }
+
+    public void setThreads(Thread... threads) {
+        this.threads = threads;
+    }
+
+    public void begin() {
+        for (Thread thread : threads) {
+            thread.start();
+        }
+    }
+
+    public void print(int waitFlag, int nextFlag, String printStr) {
+        for (int i = 0; i < loopNum; i++) {
+            synchronized (this) {
+                while (waitFlag != flag) {
+                    try {
+                        this.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                System.out.print(printStr);
+                flag = nextFlag;
+                this.notifyAll();
+            }
+        }
     }
 }
