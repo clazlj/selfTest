@@ -2,7 +2,9 @@ package concurrent;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.LockSupport;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author cl
@@ -13,7 +15,9 @@ public class TestOrder {
     public static void main(String[] args) {
 //        testSyncPark();
 
-        testSyncWaitNotify();
+//        testSyncWaitNotify();
+
+        testSyncLock();
     }
 
     private static void testSyncPark() {
@@ -41,6 +45,19 @@ public class TestOrder {
         syncWaitNotify.setThreads(t1, t2, t3);
 
         syncWaitNotify.begin();
+    }
+
+    private static void testSyncLock() {
+        SyncLock syncLock = new SyncLock(1, 5);
+
+        Thread t1 = new Thread(() -> syncLock.print(1, 2, "a"), "t1");
+        Thread t2 = new Thread(() -> syncLock.print(2, 3, "b"), "t2");
+        Thread t3 = new Thread(() -> syncLock.print(3, 1, "c\r\n"), "t3");
+
+
+        syncLock.setThreads(t1, t2, t3);
+
+        syncLock.begin();
     }
 }
 
@@ -123,6 +140,49 @@ class SyncWaitNotify {
                 System.out.print(printStr);
                 flag = nextFlag;
                 this.notifyAll();
+            }
+        }
+    }
+}
+
+class SyncLock extends ReentrantLock {
+    private int flag;
+    private int loopNum;
+    private Thread[] threads;
+    private Condition waitSet = newCondition();
+
+    public SyncLock(int flag, int loopNum) {
+        this.flag = flag;
+        this.loopNum = loopNum;
+    }
+
+    public void setThreads(Thread... threads) {
+        this.threads = threads;
+    }
+
+    public void begin() {
+        for (Thread thread : threads) {
+            thread.start();
+        }
+    }
+
+    public void print(int waitFlag, int nextFlag, String printStr) {
+        for (int i = 0; i < loopNum; i++) {
+            this.lock();
+
+            try {
+                while (waitFlag != flag) {
+                    try {
+                        waitSet.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                System.out.print(printStr);
+                flag = nextFlag;
+                waitSet.signalAll();
+            } finally {
+                this.unlock();
             }
         }
     }
