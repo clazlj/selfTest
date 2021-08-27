@@ -13,13 +13,17 @@ import java.util.concurrent.locks.ReentrantLock;
 @Slf4j(topic = "c.TestOrder")
 public class TestOrder {
     public static void main(String[] args) {
-//        testSyncPark();
+        testSyncPark();
 
 //        testSyncWaitNotify();
 
-        testSyncLock();
+//        testSyncLock();
     }
 
+    /**
+     * 个人认为：该方法比另外两个方法更好
+     * 原因：控制更精准，LockSupport.unpark()可以精确唤醒下一个线程
+     */
     private static void testSyncPark() {
         //SyncPark先new出来，供各个线程调用
         SyncPark syncPark = new SyncPark(10);
