@@ -10,10 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TestDaemon {
     public static void main(String[] args) throws InterruptedException {
         Thread t1 = new Thread(() -> {
-            while (true) {
-                if (Thread.currentThread().isInterrupted()) {
-                    break;
-                }
+            while (!Thread.currentThread().isInterrupted()) {
                 log.debug("t1线程运行中~");
             }
         }, "t1");
