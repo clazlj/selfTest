@@ -1,6 +1,9 @@
 package concurrent;
 
 import lombok.extern.slf4j.Slf4j;
+import util.SleepUtil;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * 守护线程
@@ -11,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 public class TestDaemon {
     public static void main(String[] args) throws InterruptedException {
         Thread t1 = new Thread(() -> {
-            while (!Thread.currentThread().isInterrupted()) {
+            //boolean isInterrupted = !Thread.currentThread().isInterrupted();
+            while (true) {
+                //SleepUtil.sleep(200, TimeUnit.MILLISECONDS);
                 log.debug("t1线程运行中~");
             }
         }, "t1");
