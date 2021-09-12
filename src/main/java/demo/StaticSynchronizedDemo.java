@@ -30,12 +30,13 @@ public class StaticSynchronizedDemo {
 
     private static synchronized void method1() throws InterruptedException {
         log.info("method1开始执行");
-        TimeUnit.SECONDS.sleep(5);
+        TimeUnit.SECONDS.sleep(3);
         log.info("method1执行完毕");
     }
 
     private static synchronized void method2() throws InterruptedException {
         log.info("method2开始执行");
+        TimeUnit.SECONDS.sleep(3);
         log.info("method2执行完毕");
     }
 }

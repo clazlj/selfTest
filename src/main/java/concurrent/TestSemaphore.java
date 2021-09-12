@@ -17,16 +17,6 @@ import java.util.concurrent.TimeUnit;
 public class TestSemaphore {
     public static void main(String[] args) {
         getSemaphore();
-
-        new Thread(() -> {
-            try {
-                TimeUnit.SECONDS.sleep(1);
-                log.info("线程执行完毕");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
-
     }
 
     private static void getSemaphore() {
@@ -44,7 +34,7 @@ public class TestSemaphore {
                     semaphore.acquire();
                     log.info("线程{}获取到信号量，开始执行", finalI);
                     TimeUnit.SECONDS.sleep(1);
-                    log.info("线程{}执行完毕", finalI);
+                    log.info("   线程{}执行完毕", finalI);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
