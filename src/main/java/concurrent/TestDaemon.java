@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class TestDaemon {
     public static void main(String[] args) throws InterruptedException {
         Thread t1 = new Thread(() -> {
-            //boolean isInterrupted = !Thread.currentThread().isInterrupted();
+            //boolean isInterrupted = Thread.currentThread().isInterrupted();
             while (true) {
                 //SleepUtil.sleep(200, TimeUnit.MILLISECONDS);
                 log.debug("t1线程运行中~");
