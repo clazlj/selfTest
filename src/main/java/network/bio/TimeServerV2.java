@@ -5,11 +5,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * 一请求一线程。1:1
+ * 伪异步TimeServer
+ * M个请求，N个线程。M:N
+ * 线程池可以设置消息队列的大小和最大线程数
+ * 资源占用可控，无论多少客户端并发访问，都不会导致资源的耗尽和宕机
+ * 相比于传统的一连接一线程模型，是一种改良
+ * 但底层的通信依然采用同步阻塞模型
  * @author cl
- * @date 2021-11-10 17:13:11
+ * @date 2021-11-10 20:11:27
  */
-public class TimeServer {
+public class TimeServerV2 {
     public static void main(String[] args) throws IOException {
         int port = 8080;
         if (args != null && args.length > 0) {
@@ -25,14 +30,15 @@ public class TimeServer {
             server = new ServerSocket(port);
             System.out.println("The time server is start in port:" + port);
             Socket socket = null;
+            // I/O任务线程池
+            TimeServerV2HandlerExecutePool singleExecutor = new TimeServerV2HandlerExecutePool(50, 10000);
             while (true) {
                 socket = server.accept();
                 /**
-                 * 每当一个新的客户端请求接入时，服务端必须创建一个新的线程处理新接入的客户端链路，一个线程只能处理一个客户端连接
-                 * 在高性能服务器应用领域，往往需要面向成千上万个客户端的并发连接
-                 * so这种模型显然无法满足高性能、高并发接入的场景
+                 * 将请求socket封装成一个Task，然后调用线程池的execute方法。
+                 * 避免了每个请求接入都创建一个新的线程。
                  */
-                new Thread(new TimeServerHandler(socket)).start();
+                singleExecutor.execute(new TimeServerHandler(socket));
             }
         } finally {
             if (server != null) {
