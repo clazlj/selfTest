@@ -104,7 +104,7 @@ public class MultiplexerTimeServer implements Runnable {
                 if (readBytes > 0) {
                     // 将缓存区当前的limit设置为position，position设置为0，用于后续对缓冲区的读取操作
                     readBuffer.flip();
-                    // 根据缓冲区刻度的字节格式创建字节数组
+                    // 根据缓冲区可读的字节个数创建字节数组
                     byte[] bytes = new byte[readBuffer.remaining()];
                     // 将缓冲区可读的字节数组复制到新创建的字节数组中
                     readBuffer.get(bytes);
