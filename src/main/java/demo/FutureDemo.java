@@ -1,6 +1,7 @@
 package demo;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class FutureDemo {
     public static void main(String[] args) {
@@ -42,5 +43,12 @@ public class FutureDemo {
 
         //等待所有任务完成
         future.join();
+
+        try {
+            // 同步等待，指定超时
+            future.get(5, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
