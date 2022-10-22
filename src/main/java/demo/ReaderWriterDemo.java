@@ -1,5 +1,7 @@
 package demo;
 
+import cn.hutool.core.io.FileUtil;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +10,9 @@ public class ReaderWriterDemo {
     public static void main(String[] args) {
 //        copyPomFile();
 
-        writeTxt();
+//        writeTxt();
+
+        writeTxtByUtil();
     }
 
     private static void copyPomFile() {
@@ -43,6 +47,13 @@ public class ReaderWriterDemo {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    private static void writeTxtByUtil() {
+        List<String> strList = new ArrayList<>();
+        strList.add("本次选用cn.hutool的hutool-all中的工具类");
+        strList.add("也可以使用其他比较成熟的工具类");
+        strList.add("thank you!");
+        FileUtil.appendUtf8Lines(strList, new File("writeByUtil.txt"));
     }
 }
