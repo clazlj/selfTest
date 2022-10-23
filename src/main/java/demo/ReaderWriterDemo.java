@@ -12,7 +12,12 @@ public class ReaderWriterDemo {
 
 //        writeTxt();
 
-        writeTxtByUtil();
+//        readTxt();
+
+//        writeTxtByUtil();
+
+        readTxtByUtil();
+
     }
 
     private static void copyPomFile() {
@@ -49,11 +54,37 @@ public class ReaderWriterDemo {
         }
     }
 
+    private static void readTxt() {
+        StringBuilder stringBuilder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(new File("write.txt"))))) {
+            String str;
+            while ((str = reader.readLine()) != null) {
+                stringBuilder.append(str);
+                stringBuilder.append(System.lineSeparator());
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(stringBuilder);
+    }
+
     private static void writeTxtByUtil() {
         List<String> strList = new ArrayList<>();
         strList.add("本次选用cn.hutool的hutool-all中的工具类");
         strList.add("也可以使用其他比较成熟的工具类");
         strList.add("thank you!");
         FileUtil.appendUtf8Lines(strList, new File("writeByUtil.txt"));
+    }
+
+    private static void readTxtByUtil() {
+        List<String> resultList = FileUtil.readUtf8Lines(new File("writeByUtil.txt"));
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String str : resultList) {
+            stringBuilder.append(str);
+            stringBuilder.append(System.lineSeparator());
+        }
+        System.out.println(stringBuilder);
     }
 }
