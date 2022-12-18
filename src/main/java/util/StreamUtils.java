@@ -12,13 +12,17 @@ import java.util.stream.Stream;
  */
 public class StreamUtils {
     public static void main(String[] args) {
-        concatStream();
+//        concatStream();
 
 //        sequentialSum(5L);
 
         //groupList();
 
-        summarizingInt();
+//        mapAndFlatMap();
+
+//        summarizingInt();
+
+        parallelStream();
     }
 
     private static void concatStream() {
@@ -115,5 +119,17 @@ public class StreamUtils {
         Map<String, Long> strSizeMap = strList.stream()
                 .collect(Collectors.groupingBy(i -> i, Collectors.counting()));
         System.out.println(JSON.toJSONString(strSizeMap));
+    }
+
+    public static void parallelStream() {
+        // 核数
+        int count = Runtime.getRuntime().availableProcessors();
+        System.out.println(count);
+
+        List<Integer> result = Arrays.asList(1, 2, 3, 4, 6, 7, 8, 9, 10);
+
+        List<Integer> result1 = result.stream().map(i -> i + 1).collect(Collectors.toList());
+
+        List<Integer> result2 = result.parallelStream().map(i -> i + 1).collect(Collectors.toList());
     }
 }
