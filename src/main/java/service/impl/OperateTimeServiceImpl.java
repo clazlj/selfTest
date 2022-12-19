@@ -3,6 +3,7 @@ package service.impl;
 import service.OperateTimeService;
 
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.*;
 import java.util.Date;
 
@@ -14,6 +15,26 @@ public class OperateTimeServiceImpl implements OperateTimeService {
         predefinedTemporalAdjuster();
 
         customizedTemporalAdjuster();
+
+        dateTimeFormatAndParse();
+    }
+
+    /**
+     * 线程安全的时间格式器
+     */
+    private static void dateTimeFormatAndParse() {
+        LocalDate now = LocalDate.now();
+
+        String s1 = now.format(DateTimeFormatter.BASIC_ISO_DATE);
+        String s2 = now.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        String s3 = now.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+        System.out.println(s1);
+        System.out.println(s2);
+        System.out.println(s3);
+
+        LocalDate date1 = LocalDate.parse(s1, DateTimeFormatter.BASIC_ISO_DATE);
+        LocalDate date2 = LocalDate.parse(s2, DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
     /**
