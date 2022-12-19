@@ -3,14 +3,65 @@ package service.impl;
 import service.OperateTimeService;
 
 import java.time.*;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
+import java.time.temporal.*;
 import java.util.Date;
 
 /**
  * Created by jdd on 2017/9/5.
  */
 public class OperateTimeServiceImpl implements OperateTimeService {
+    public static void main(String[] args) {
+        predefinedTemporalAdjuster();
+
+        customizedTemporalAdjuster();
+    }
+
+    /**
+     * @see TemporalAdjusters 常用的获取java.time.temporal.TemporalAdjuster的工具类
+     * 预定义的java.time.temporal.TemporalAdjuster
+     */
+    private static void predefinedTemporalAdjuster() {
+        LocalDate date1 = LocalDate.of(2022, 12, 19);
+        LocalDate date2 = date1.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
+        LocalDate date3 = date2.with(TemporalAdjusters.lastDayOfMonth());
+        LocalDate date4 = date1.with(TemporalAdjusters.firstDayOfYear());
+
+        System.out.println(date1);
+        System.out.println(date2);
+        System.out.println(date3);
+        System.out.println(date4);
+    }
+
+    /**
+     * @see TemporalAdjuster 函数式接口，调整时间对象的策略。
+     * 自定义java.time.temporal.TemporalAdjuster
+     */
+    private static void customizedTemporalAdjuster() {
+        LocalDate date1 = LocalDate.now();
+        //获取下一个工作日
+        LocalDate date2 = date1.with(nextWorkingDay());
+
+        System.out.println(date1);
+        System.out.println(date2);
+    }
+
+    /**
+     * 周五加3天，周六加2天，其余加1天
+     */
+    private static TemporalAdjuster nextWorkingDay() {
+        return temporal -> {
+            int dayOfWeek = temporal.get(ChronoField.DAY_OF_WEEK);
+            DayOfWeek dow = DayOfWeek.of(dayOfWeek);
+            int dayToAdd = 1;
+            if (dow == DayOfWeek.FRIDAY) {
+                dayToAdd = 3;
+            } else if (dow == DayOfWeek.SATURDAY) {
+                dayToAdd = 2;
+            }
+            return temporal.plus(dayToAdd, ChronoUnit.DAYS);
+        };
+    }
+
 
     @Override
     public void learnDate() {
