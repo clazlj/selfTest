@@ -23,6 +23,8 @@ public class StreamUtils {
 //        summarizingInt();
 
         parallelStream();
+
+        generateNumPair();
     }
 
     private static void concatStream() {
@@ -131,5 +133,23 @@ public class StreamUtils {
         List<Integer> result1 = result.stream().map(i -> i + 1).collect(Collectors.toList());
 
         List<Integer> result2 = result.parallelStream().map(i -> i + 1).collect(Collectors.toList());
+    }
+
+    /**
+     * 使用flatMap
+     * 生成数对： 给定两个数字列表，返回所有的数对。
+     * 例如，给定列表[1, 2, 3]和列表[3, 4]，应该返回[(1, 3), (1, 4), (2, 3), (2, 4), (3, 3), (3, 4)]。
+     * 为简单起见，你可以用有两个元素的数组来代表数对。
+     */
+    public static void generateNumPair() {
+        List<Integer> numbers1 = Arrays.asList(1, 2, 3);
+        List<Integer> numbers2 = Arrays.asList(3, 4);
+
+        // 并且限制两个数的和是3的倍数
+        List<Integer[]> result = numbers1.stream()
+                .flatMap(i -> numbers2.stream().filter(j -> (i + j) % 3 == 0).map(j -> new Integer[]{i, j}))
+                .collect(Collectors.toList());
+
+        result.forEach(i -> System.out.println(Arrays.toString(i)));
     }
 }
