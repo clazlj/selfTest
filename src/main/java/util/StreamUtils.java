@@ -25,6 +25,8 @@ public class StreamUtils {
         parallelStream();
 
         generateNumPair();
+
+        printFibonacci();
     }
 
     private static void concatStream() {
@@ -151,5 +153,17 @@ public class StreamUtils {
                 .collect(Collectors.toList());
 
         result.forEach(i -> System.out.println(Arrays.toString(i)));
+    }
+
+    public static void printFibonacci() {
+        // 斐波纳契数列，数列中开始的两个数字是0和1，后续的每个数字都是前两个数字之和。如0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55 …
+        // 斐波纳契元组序列与此类似，是数列中数字和其后续数字组成的元组构成的序列：(0, 1),(1, 1), (1, 2), (2, 3), (3, 5), (5, 8), (8, 13), (13, 21) …
+        // 利用Stream.iterate生成无限流，limit截取前20个
+        // 最终取每个数组的第1个元素
+        int[] initArr = new int[]{0, 1};
+        Stream.iterate(initArr, t -> new int[]{t[1], t[0] + t[1]})
+                .limit(20)
+                .map(t -> t[0])
+                .forEach(System.out::println);
     }
 }
