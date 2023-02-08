@@ -202,7 +202,9 @@ public class StreamUtils {
         System.out.println("---------------------------");
 
         //LongStream.rangeClosed
-        System.out.println("求和LongStream.rangeClosed执行耗时：" + getRangeClosedTime(limit));
+        System.out.println("求和LongStream.rangeClosed顺序执行耗时：" + getRangeClosedTime(limit, false));
+
+        System.out.println("求和LongStream.rangeClosed并行执行耗时：" + getRangeClosedTime(limit, true));
     }
 
     private static long getSumTime(Consumer<Long> consumer, long limit) {
@@ -237,15 +239,22 @@ public class StreamUtils {
      * LongStream.rangeClosed 的方法。这个方法与 iterate 相比有两个优点
      * 1，LongStream.rangeClosed直接产生原始类型的long数字，没有装箱拆箱的开销
      * 2，LongStream.rangeClosed会产生数字范围，很容易拆分为独立的小块。例如，范围1~20可分为1~5、6~10、11~15和16~20。
+     * <p>
+     * 这个数值流比前面那个用 iterate 工厂方法生成数字的顺序执行版本要快得多，因为数值流避免了非针对性流那些没必要的自动装箱和拆箱操作。
+     * 由此可见，选择适当的数据结构往往比并行化算法更重要。
      */
-    private static long getRangeClosedTime(long n) {
+    private static long getRangeClosedTime(long n, boolean parallel) {
         long total = 0;
         int loopCount = 10;
         for (int count = 0; count < loopCount; count++) {
             long start = System.currentTimeMillis();
 
-            LongStream.rangeClosed(1, n).reduce(0L, Long::sum);
-
+            LongStream longStream = LongStream.rangeClosed(1, n);
+            if (parallel) {
+                longStream.parallel().reduce(0L, Long::sum);
+            } else {
+                longStream.reduce(0L, Long::sum);
+            }
             total += System.currentTimeMillis() - start;
         }
 
