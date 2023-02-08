@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 /**
@@ -198,6 +199,10 @@ public class StreamUtils {
 
         System.out.println("求和List并行执行耗时：" + getSumTimeWithList(list -> list.stream().parallel().reduce(0L, Long::sum), numList));
 
+        System.out.println("---------------------------");
+
+        //LongStream.rangeClosed
+        System.out.println("求和LongStream.rangeClosed执行耗时：" + getRangeClosedTime(limit));
     }
 
     private static long getSumTime(Consumer<Long> consumer, long limit) {
@@ -227,4 +232,24 @@ public class StreamUtils {
 
         return total / loopCount;
     }
+
+    /**
+     * LongStream.rangeClosed 的方法。这个方法与 iterate 相比有两个优点
+     * 1，LongStream.rangeClosed直接产生原始类型的long数字，没有装箱拆箱的开销
+     * 2，LongStream.rangeClosed会产生数字范围，很容易拆分为独立的小块。例如，范围1~20可分为1~5、6~10、11~15和16~20。
+     */
+    private static long getRangeClosedTime(long n) {
+        long total = 0;
+        int loopCount = 10;
+        for (int count = 0; count < loopCount; count++) {
+            long start = System.currentTimeMillis();
+
+            LongStream.rangeClosed(1, n).reduce(0L, Long::sum);
+
+            total += System.currentTimeMillis() - start;
+        }
+
+        return total / loopCount;
+    }
+
 }
