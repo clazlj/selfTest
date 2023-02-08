@@ -3,6 +3,7 @@ package util;
 import com.alibaba.fastjson.JSON;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,11 +23,13 @@ public class StreamUtils {
 
 //        summarizingInt();
 
-        parallelStream();
+//        parallelStream();
 
-        generateNumPair();
+//        generateNumPair();
 
-        printFibonacci();
+//        printFibonacci();
+
+        compareSequentialAndParallel(10_000_000L);
     }
 
     private static void concatStream() {
@@ -165,5 +168,40 @@ public class StreamUtils {
                 .limit(20)
                 .map(t -> t[0])
                 .forEach(System.out::println);
+    }
+
+    /**
+     * 前n个自然数求和，比较顺序流和并行流
+     * 现象：并行流反而更慢。
+     * 原因：Stream.iterate本身不易并行化，具体来说， iterate 很难分割成能够独立执行的小块，因为每次应用这个函数都要依赖前一次应用的结果
+     */
+    public static void compareSequentialAndParallel(long limit) {
+        System.out.println("处理器数量：" + Runtime.getRuntime().availableProcessors());
+
+        System.out.println("求和顺序执行耗时：" + getSumTime(i ->
+                Stream.iterate(1L, j -> j + 1)
+                        .limit(i)
+                        .reduce(0L, Long::sum), limit));
+
+        System.out.println("求和并行执行耗时：" + getSumTime(i ->
+                Stream.iterate(1L, j -> j + 1)
+                        .limit(i)
+                        .parallel()
+                        .reduce(0L, Long::sum), limit));
+
+    }
+
+    private static long getSumTime(Consumer<Long> consumer, long limit) {
+        long total = 0;
+        int loopCount = 10;
+        for (int count = 0; count < loopCount; count++) {
+            long start = System.currentTimeMillis();
+
+            consumer.accept(limit);
+
+            total += System.currentTimeMillis() - start;
+        }
+
+        return total / loopCount;
     }
 }
