@@ -172,22 +172,31 @@ public class StreamUtils {
 
     /**
      * 前n个自然数求和，比较顺序流和并行流
-     * 现象：并行流反而更慢。
-     * 原因：Stream.iterate本身不易并行化，具体来说， iterate 很难分割成能够独立执行的小块，因为每次应用这个函数都要依赖前一次应用的结果
+     * 现象：Stream.iterate并行流反而更慢。
+     * 原因：Stream.iterate在本质上是顺序的，本身不易并行化。具体来说，iterate很难分割成能够独立执行的小块，因为每次应用这个函数都要依赖前一次应用的结果
      */
     public static void compareSequentialAndParallel(long limit) {
         System.out.println("处理器数量：" + Runtime.getRuntime().availableProcessors());
 
-        System.out.println("求和顺序执行耗时：" + getSumTime(i ->
+        System.out.println("求和Stream.iterate顺序执行耗时：" + getSumTime(i ->
                 Stream.iterate(1L, j -> j + 1)
                         .limit(i)
                         .reduce(0L, Long::sum), limit));
 
-        System.out.println("求和并行执行耗时：" + getSumTime(i ->
+        System.out.println("求和Stream.iterate并行执行耗时：" + getSumTime(i ->
                 Stream.iterate(1L, j -> j + 1)
                         .limit(i)
                         .parallel()
                         .reduce(0L, Long::sum), limit));
+
+        System.out.println("---------------------------");
+
+        List<Long> numList = Stream.iterate(1L, j -> j + 1)
+                .limit(limit).collect(Collectors.toList());
+
+        System.out.println("求和List顺序执行耗时：" + getSumTimeWithList(list -> list.stream().reduce(0L, Long::sum), numList));
+
+        System.out.println("求和List并行执行耗时：" + getSumTimeWithList(list -> list.stream().parallel().reduce(0L, Long::sum), numList));
 
     }
 
@@ -198,6 +207,20 @@ public class StreamUtils {
             long start = System.currentTimeMillis();
 
             consumer.accept(limit);
+
+            total += System.currentTimeMillis() - start;
+        }
+
+        return total / loopCount;
+    }
+
+    private static long getSumTimeWithList(Consumer<List<Long>> consumer, List<Long> numList) {
+        long total = 0;
+        int loopCount = 10;
+        for (int count = 0; count < loopCount; count++) {
+            long start = System.currentTimeMillis();
+
+            consumer.accept(numList);
 
             total += System.currentTimeMillis() - start;
         }
