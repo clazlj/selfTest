@@ -16,7 +16,7 @@ public class ReaderWriterDemo {
 
 //        writeTxtByUtil();
 
-        readTxtByUtil();
+        readTxtByUtil("writeByUtil.txt");
 
     }
 
@@ -78,13 +78,13 @@ public class ReaderWriterDemo {
         FileUtil.appendUtf8Lines(strList, new File("writeByUtil.txt"));
     }
 
-    private static void readTxtByUtil() {
-        List<String> resultList = FileUtil.readUtf8Lines(new File("writeByUtil.txt"));
+    public static String readTxtByUtil(String pathname) {
+        List<String> resultList = FileUtil.readUtf8Lines(new File(pathname));
         StringBuilder stringBuilder = new StringBuilder();
         for (String str : resultList) {
             stringBuilder.append(str);
             stringBuilder.append(System.lineSeparator());
         }
-        System.out.println(stringBuilder);
+        return stringBuilder.toString();
     }
 }
