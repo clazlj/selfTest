@@ -17,8 +17,9 @@ public class CollectionDemo {
      * 将数组转换为ArrayList
      */
     public static void toArrayList() {
-        //最简便的方法
+        //原生最简便的方法，无需引入三方包
         List<String> list = new ArrayList<>(Arrays.asList("3", "56", "gy"));
+
 
         //使用 Java8 的Stream
         Integer[] myArray1 = { 1, 2, 3 };
@@ -29,6 +30,8 @@ public class CollectionDemo {
         list2 = Arrays.stream(myArray2).boxed().collect(Collectors.toList());
 
         //使用 Guava：ImmutableList，Lists
+        //List<String> strList = com.google.common.collect.Lists.newArrayList("3", "56", "gy");
+
 
         //使用 Apache Commons Collections
 
