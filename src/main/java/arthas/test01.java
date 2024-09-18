@@ -3,6 +3,7 @@ package arthas;
 import java.util.*;
 
 /**
+ * thread -i 3000 -n 5
  * @author cl
  */
 public class test01 {
