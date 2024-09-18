@@ -8,8 +8,12 @@ import java.util.*;
  */
 public class test01 {
     public static void main(String[] args) {
+        System.out.println("按输入任意内容开始：");
+        new Scanner(System.in).next();
+
         List<Integer> intList = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        for (int i = 0; i < 30; i++) {
+
+        for (int i = 0; i < 5; i++) {
             listRandom(intList, i);
         }
     }
