@@ -16,6 +16,9 @@ public class test01 {
         for (int i = 0; i < 5; i++) {
             listRandom(intList, i);
         }
+
+        System.out.println("按输入任意内容结束：");
+        new Scanner(System.in).next();
     }
 
     private static List<Integer> listRandom(List<Integer> strList, int count) {
