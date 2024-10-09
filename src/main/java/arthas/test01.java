@@ -8,17 +8,19 @@ import java.util.*;
  */
 public class test01 {
     public static void main(String[] args) {
-        System.out.println("按输入任意内容开始：");
-        new Scanner(System.in).next();
+        while (true) {
+            System.out.println("按输入整数的循环次数或over结束：");
+            String input = new Scanner(System.in).next();
+            if ("over".equals(input)) {
+                break;
+            }
 
-        List<Integer> intList = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-
-        for (int i = 0; i < 5; i++) {
-            listRandom(intList, i);
+            List<Integer> intList = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+            int loop = Integer.parseInt(input);
+            for (int i = 0; i < loop; i++) {
+                listRandom(intList, i);
+            }
         }
-
-        System.out.println("按输入任意内容结束：");
-        new Scanner(System.in).next();
     }
 
     private static List<Integer> listRandom(List<Integer> strList, int count) {
