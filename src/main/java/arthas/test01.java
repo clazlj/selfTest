@@ -14,9 +14,14 @@ public class test01 {
             if ("over".equals(input)) {
                 break;
             }
+            int loop;
+            try {
+                loop = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                continue;
+            }
 
             List<Integer> intList = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-            int loop = Integer.parseInt(input);
             for (int i = 0; i < loop; i++) {
                 listRandom(intList, i);
             }
