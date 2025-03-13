@@ -20,6 +20,18 @@ public class ReaderWriterDemo {
 
     }
 
+    public static String readTxtByUtil(String pathname) {
+        List<String> resultList = FileUtil.readUtf8Lines(new File(pathname));
+        StringBuilder sb = new StringBuilder();
+        for (String str : resultList) {
+            sb.append(String.format("INSERT INTO `jdd_zhcx_info`.`info_fake_user`(`s_tenant_code`, `n_user_id`, `d_update_time`, `d_create_time`) VALUES ('zhcx', %s, now(), now());", str));
+            sb.append(System.lineSeparator());
+        }
+        String result = sb.toString();
+        System.out.println(result);
+        return result;
+    }
+
     private static void copyPomFile() {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("pom.xml")));
              BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("pom-backup.xml")))) {
@@ -76,15 +88,5 @@ public class ReaderWriterDemo {
         strList.add("也可以使用其他比较成熟的工具类");
         strList.add("thank you!");
         FileUtil.appendUtf8Lines(strList, new File("writeByUtil.txt"));
-    }
-
-    public static String readTxtByUtil(String pathname) {
-        List<String> resultList = FileUtil.readUtf8Lines(new File(pathname));
-        StringBuilder stringBuilder = new StringBuilder();
-        for (String str : resultList) {
-            stringBuilder.append(str);
-            stringBuilder.append(System.lineSeparator());
-        }
-        return stringBuilder.toString();
     }
 }
