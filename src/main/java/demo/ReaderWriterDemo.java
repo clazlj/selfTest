@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReaderWriterDemo {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 //        copyPomFile();
 
 //        writeTxt();
@@ -16,8 +16,23 @@ public class ReaderWriterDemo {
 
 //        writeTxtByUtil();
 
-        readTxtByUtil("writeByUtil.txt");
+        //readTxtByUtil("writeByUtil.txt");
 
+        System.out.println(readFileAsBytes("writeByUtil.txt"));
+
+    }
+
+    /**
+     * Java NIO.2
+     * Java 7 引入的新的 I/O API，也称为 Asynchronous I/O 或 AIO。它是对原有 NIO（Non-blocking I/O）的扩展和增强。
+     * <p>
+     * 读取文件为字节数组再转换为字符串
+     *
+     * @param filePath 文件路径
+     */
+    public static String readFileAsBytes(String filePath) throws IOException {
+        byte[] bytes = Files.readAllBytes(Paths.get(filePath));
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
     public static String readTxtByUtil(String pathname) {
